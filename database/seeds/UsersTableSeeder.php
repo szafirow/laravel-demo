@@ -1,39 +1,28 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use App\User;
-use App\Roles;
+use TCG\Voyager\Models\Role;
+use TCG\Voyager\Models\User;
 
 class UsersTableSeeder extends Seeder
 {
     /**
-     * Run the database seeds.
+     * Auto generated seed file.
      *
      * @return void
      */
     public function run()
     {
-        $role = Roles::where('name','Admin')->first();
-        $user = new User();
-        $user->name ='user';
-        $user->email = 'user@example.com';
-        $user->password = bcrypt('user');
-        $user->save();
-        $user->roles()->attach(1);
+        if (User::count() == 0) {
+            $role = Role::where('name', 'admin')->firstOrFail();
 
-        $user = new User();
-        $user->name = 'user2';
-        $user->email ='user2@example';
-        $user->password = bcrypt('user2');
-        $user->save();
-        $user->roles()->attach(2);
-
-        $user = new User();
-        $user->name = 'user3';
-        $user->email ='user3@example';
-        $user->password = bcrypt('user3');
-        $user->save();
-        $user->roles()->attach(3);
-
+            User::create([
+                'name'           => 'Admin',
+                'email'          => 'admin@admin.com',
+                'password'       => bcrypt('password'),
+                'remember_token' => str_random(60),
+                'role_id'        => $role->id,
+            ]);
+        }
     }
 }

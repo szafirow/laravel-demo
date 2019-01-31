@@ -11,51 +11,16 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/', [
+    'uses' => 'IndexController@index',
+    'as' => 'index.index'
+]);
+
+Route::get('/post/{post}', [
+    'uses' => 'IndexController@post',
+    'as' => 'index.post'
+]);
+
+Route::group(['prefix' => 'admin'], function () {
+    Voyager::routes();
 });
-
-
-
-Route::group([
-    'middleware' => 'roles',
-    'roles' => ['Admin','Moderator']
-], function() {
-
-    //Route::resource('pages','PagesController');
-    Route::get('pages', [
-        'uses' => 'PagesController@index',
-        'as' => 'pages.index'
-        ]);
-
-    Route::get('pages/create', [
-        'uses' => 'PagesController@create',
-        'as' => 'pages.create'
-    ]);
-
-    Route::post('pages/store', [
-        'uses' => 'PagesController@store',
-        'as' => 'pages.store'
-    ]);
-
-    Route::get('pages/edit/{page}', [
-        'uses' => 'PagesController@edit',
-        'as' => 'pages.edit'
-    ]);
-
-    Route::put('pages/{page}', [
-        'uses' => 'PagesController@update',
-        'as' => 'pages.update'
-    ]);
-
-    Route::delete('pages/{page}', [
-        'uses' => 'PagesController@destroy',
-        'as' => 'pages.delete'
-    ]);
-
-});
-
-
-Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');
